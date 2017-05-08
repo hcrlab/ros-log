@@ -1,0 +1,48 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`ros-log`
+Adds the robot&#39;s log info to the website
+
+@demo demo/index.html 
+-->
+
+<dom-module id="ros-log">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]</h2>
+    <p>Does this even work?</p>
+    <ros-websocket ros="{{ros}}"></ros-websocket>
+    <ros-topic
+      auto
+      id="topic"
+      last-message="{{time}}"
+      on-message="handleMessage"
+      topic="/clock"
+      ros="{{ros}}"
+      msg-type="rosgraph_msgs/Clock"
+      ></ros-topic>
+      Time: {{time.clock.secs}}.{{time.clock.nsecs}}
+   
+ 
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'ros-log',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'ros-log',
+        },
+      },
+
+    });
+  </script>
+</dom-module>
