@@ -1,4 +1,7 @@
+
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../ros-topic/ros-topic.html">
+<link rel="import" href="../paper-datatable/paper-datatable.html">
 
 <!--
 `ros-log`
@@ -16,18 +19,30 @@ Adds the robot&#39;s log info to the website
     </style>
     <h2>Hello [[prop1]]</h2>
     <p>Does this even work?</p>
-    <ros-websocket ros="{{ros}}"></ros-websocket>
+    <ros-websocket ros="{{ros}}" auto ros="{{ros}}" on-connection="handleConnection"></ros-websocket>
     <ros-topic
       auto
       id="topic"
-      last-message="{{time}}"
+      last-message="{{Log}}"
       on-message="handleMessage"
-      topic="/clock"
+      topic="/rosout"
       ros="{{ros}}"
-      msg-type="rosgraph_msgs/Clock"
+      msg-type="rosgraph_msgs/Log"
       ></ros-topic>
-      Time: {{time.clock.secs}}.{{time.clock.nsecs}}
-   
+
+      <paper-datatable data="{{data}}" selectable multi-selection>
+          <paper-datatable-column header="Title" property="title" sortable editable>
+                  <template>
+                     <paper-input value="{{value}}">
+                  </template>
+          </paper-datatable-column>
+       </paper-datatable>
+                                          
+
+      <div id="log_info_holder">
+
+      </div>
+      Message {{Log.msg}} 
  
   </template>
 
@@ -42,6 +57,18 @@ Adds the robot&#39;s log info to the website
           value: 'ros-log',
         },
       },
+
+    handleConnection: function(){
+        console.log("we are connected");
+    },
+
+    handleMessage: function(evt){
+        console.log(evt.toSource());
+       loggerDiv = document.getElementById("log_info_holder");
+       loggerDiv.innerHTML += evt.detail.msg;
+       loggerDiv.innerHTML += "<p></p>";
+    }
+
 
     });
   </script>
