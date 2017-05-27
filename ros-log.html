@@ -17,8 +17,6 @@ Adds the robot&#39;s log info to the website
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]</h2>
-    <p>Does this even work?</p>
     <ros-websocket ros="{{ros}}" auto ros="{{ros}}" on-connection="handleConnection"></ros-websocket>
     <ros-topic
       auto
@@ -30,31 +28,38 @@ Adds the robot&#39;s log info to the website
       msg-type="rosgraph_msgs/Log"
       ></ros-topic>
 
-      <paper-datatable data="{{data}}" selectable multi-selection>
-          <paper-datatable-column header="Title" property="title" sortable editable>
-                  <template>
-                     <paper-input value="{{value}}">
-                  </template>
+      <paper-datatable data="{{logMessages}}">
+          <paper-datatable-column header="Log Name" property="name" type="String" sortable>
+                  <paper-input value="">
           </paper-datatable-column>
-       </paper-datatable>
-                                          
 
-      <div id="log_info_holder">
+          <paper-datatable-column header="Log Message" property="msg" type="String" sortable>
+                  <paper-input value="">
+          </paper-datatable-column>
 
-      </div>
-      Message {{Log.msg}} 
+          <paper-datatable-column header="Log Time" property="time" type="String"  sortable>
+          <span> {{value.frame_id}} </span>
+          </paper-datatable-column>
+
+          
+          <paper-datatable-column header="Severity" property="level" type="String" sortable>
+                  <paper-input value="">
+          </paper-datatable-column>
+      </paper-datatable>
+            
  
   </template>
 
   <script>
+
     Polymer({
 
       is: 'ros-log',
 
       properties: {
-        prop1: {
-          type: String,
-          value: 'ros-log',
+        logMessages: {
+          type: Array,
+          value: function() { return []; }
         },
       },
 
@@ -63,10 +68,36 @@ Adds the robot&#39;s log info to the website
     },
 
     handleMessage: function(evt){
+        var displayObj = new Object();
+        var secs = evt.detail.header.stamp.secs;
+        var nsecs = evt.detail.header.stamp.nsecs;
+        var milisecs = (nsecs /  1000000) + (secs * 1000);
+        var level;
+        console.log(milisecs);
+        var d = new Date(milisecs);
+        displayObj.msg = evt.detail.msg;
+        displayObj.name = evt.detail.name;
+        switch (evt.detail.level){
+            case 1:
+                level = "DEBUG";
+                break;
+            case 2:
+                level = "INFO";
+                break;
+            case 3:
+                level = "WARN";
+                break;
+            case 4:
+                level = "ERROR";
+                break;
+            case 5:
+                level = "FATAL";
+                break;
+        }
+        displayObj.level = level;
+        displayObj.time = d.toTimeString();
         console.log(evt.toSource());
-       loggerDiv = document.getElementById("log_info_holder");
-       loggerDiv.innerHTML += evt.detail.msg;
-       loggerDiv.innerHTML += "<p></p>";
+       this.push('logMessages', displayObj);
     }
 
 
