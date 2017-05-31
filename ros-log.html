@@ -17,7 +17,6 @@ Adds the robot&#39;s log info to the website
         display: block;
       }
     </style>
-    <ros-websocket ros="{{ros}}" auto ros="{{ros}}" on-connection="handleConnection"></ros-websocket>
     <ros-topic
       auto
       id="topic"
@@ -55,7 +54,7 @@ Adds the robot&#39;s log info to the website
     Polymer({
 
       is: 'ros-log',
-
+      ros:Object,
       properties: {
         logMessages: {
           type: Array,
