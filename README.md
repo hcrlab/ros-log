@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # \<ros-log\>
 
-Adds the robot&#39;s log info to the website
+Adds the robot's log info to the website
 
 ## Install the Polymer-CLI
 
@@ -37,7 +36,3 @@ $ polymer test
 ```
 
 Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
-=======
-# ros-log
-Adds robot logs to the website
->>>>>>> ae6f7e85c8c65ab7cad56a7b9954622ecb191e93
