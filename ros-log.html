@@ -20,7 +20,6 @@ Adds the robot&#39;s log info to the website
     <ros-topic
       auto
       id="topic"
-      last-message="{{Log}}"
       on-message="handleMessage"
       topic="/rosout"
       ros="{{ros}}"
@@ -28,21 +27,20 @@ Adds the robot&#39;s log info to the website
       ></ros-topic>
 
       <paper-datatable data="{{logMessages}}">
-          <paper-datatable-column header="Log Name" property="name" type="String" sortable>
-                  <paper-input value="">
+          <paper-datatable-column header="Node" property="name" type="String" sortable>
+            <paper-input value="">
           </paper-datatable-column>
 
-          <paper-datatable-column header="Log Message" property="msg" type="String" sortable>
-                  <paper-input value="">
+          <paper-datatable-column header="Message" property="msg" type="String" sortable>
+            <paper-input value="">
           </paper-datatable-column>
 
-          <paper-datatable-column header="Log Time" property="time" type="String"  sortable>
-          <span> {{value.frame_id}} </span>
+          <paper-datatable-column header="Time" property="time" type="String"  sortable>
+            <span> {{value.frame_id}} </span>
           </paper-datatable-column>
 
-          
           <paper-datatable-column header="Severity" property="level" type="String" sortable>
-                  <paper-input value="">
+            <paper-input value="">
           </paper-datatable-column>
       </paper-datatable>
             
@@ -50,56 +48,47 @@ Adds the robot&#39;s log info to the website
   </template>
 
   <script>
-
     Polymer({
-
       is: 'ros-log',
-      ros:Object,
+
       properties: {
+        ros: Object,
         logMessages: {
           type: Array,
           value: function() { return []; }
         },
       },
 
-    handleConnection: function(){
-        console.log("we are connected");
-    },
-
-    handleMessage: function(evt){
-        var displayObj = new Object();
+      handleMessage: function(evt){
+        var displayObj = {};
         var secs = evt.detail.header.stamp.secs;
         var nsecs = evt.detail.header.stamp.nsecs;
         var milisecs = (nsecs /  1000000) + (secs * 1000);
         var level;
-        console.log(milisecs);
         var d = new Date(milisecs);
         displayObj.msg = evt.detail.msg;
         displayObj.name = evt.detail.name;
         switch (evt.detail.level){
-            case 1:
-                level = "DEBUG";
-                break;
-            case 2:
-                level = "INFO";
-                break;
-            case 3:
-                level = "WARN";
-                break;
-            case 4:
-                level = "ERROR";
-                break;
-            case 5:
-                level = "FATAL";
-                break;
+          case 1:
+            level = "DEBUG";
+            break;
+          case 2:
+            level = "INFO";
+            break;
+          case 3:
+            level = "WARN";
+            break;
+          case 4:
+            level = "ERROR";
+            break;
+          case 5:
+            level = "FATAL";
+            break;
         }
         displayObj.level = level;
         displayObj.time = d.toTimeString();
-        console.log(evt.toSource());
-       this.push('logMessages', displayObj);
-    }
-
-
+        this.push('logMessages', displayObj);
+      }
     });
   </script>
 </dom-module>
